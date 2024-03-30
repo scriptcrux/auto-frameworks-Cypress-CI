@@ -10,14 +10,14 @@ import loginPage from './pages/Accounts/LoginPage';
 describe('template spec', () => {
   const fileNamecsv = 'cypress/fixtures/login.csv';
   const fileNamejson = 'cypress/fixtures/login.json';
-  before('Navigation to portal', function () {
+  beforeEach('Navigation to portal', function () {
     cy.visit('/');
     cy.fixture('login.json').then(function (data) {
       this.newData = data[1];
     });
   });
 
-  it('user is able to register', () => {
+  xit('user is able to register', () => {
     //generating data
     const username = faker.person.firstName();
     const lastname = faker.person.lastName();

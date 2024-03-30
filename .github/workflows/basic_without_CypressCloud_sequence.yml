@@ -1,0 +1,70 @@
+name: basic_without_CypressCloud_sequence
+on:
+  push:
+    branches:
+      # - 'master'
+      # - 'main'
+      - 'features/**'
+  pull_request:
+    branches:
+      # - 'master'
+      # - 'main'
+      - 'features/**'
+  workflow_dispatch:
+jobs:
+  cypress-run:
+    runs-on: ubuntu-22.04
+    # container:
+    #     image: cypress/browsers:latest
+    #     options: --user 1001
+    name: cross-browser testing
+    # continue-on-error: true
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Cypress run in chrome
+        uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+      # - name: store screenshots
+      #   uses: actions/upload-artifact@v4
+      #   # add the line below to store screenshots only on failures
+      #   # if: failure()
+      #   with:
+      #     name: cypress-screenshots
+      #     path: cypress/screenshots
+      #     # 'warn' or 'error' are also available, defaults to `warn`
+      #     if-no-files-found: ignore
+      # - name: store videos
+      # uses: actions/upload-artifact@v4
+      # with:
+      #   name: cypress-videos
+      #   path: cypress/videos
+      #   # 'warn' or 'error' are also available, defaults to `warn`
+      #   if-no-files-found: ignore
+      - name: Cypress run in edge
+        uses: cypress-io/github-action@v6
+        with:
+          browser: edge
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+      - name: store screenshots
+        uses: actions/upload-artifact@v4
+        # add the line below to store screenshots only on failures
+        # if: failure()
+        with:
+          name: cypress-screenshots
+          path: cypress/screenshots
+          # 'warn' or 'error' are also available, defaults to `warn`
+          if-no-files-found: ignore
+      - name: store videos
+        uses: actions/upload-artifact@v4
+        with:
+          name: cypress-videos
+          path: cypress/videos
+          # 'warn' or 'error' are also available, defaults to `warn`
+          if-no-files-found: ignore

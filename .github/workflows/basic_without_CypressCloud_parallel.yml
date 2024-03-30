@@ -13,6 +13,9 @@ on:
   workflow_dispatch:
 jobs:
   cypress-run:
+    strategy:
+      matrix:
+        browsers: [chrome, edge]
     runs-on: ubuntu-22.04
     # container:
     #     image: cypress/browsers:latest
@@ -25,41 +28,10 @@ jobs:
       - name: Cypress run in chrome
         uses: cypress-io/github-action@v6
         with:
-          browser: chrome
+          browser: ${{matrix.browsers}}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true
-      - name: logging0
-        run: |
-          ls cypress/screenshots
-          ls cypress/videos
-      # - name: store screenshots
-      #   uses: actions/upload-artifact@v4
-      #   # add the line below to store screenshots only on failures
-      #   # if: failure()
-      #   with:
-      #     name: cypress-screenshots
-      #     path: cypress/screenshots
-      #     # 'warn' or 'error' are also available, defaults to `warn`
-      #     if-no-files-found: ignore
-      # - name: store videos
-      # uses: actions/upload-artifact@v4
-      # with:
-      #   name: cypress-videos
-      #   path: cypress/videos
-      #   # 'warn' or 'error' are also available, defaults to `warn`
-      #   if-no-files-found: ignore
-      - name: Cypress run in edge
-        uses: cypress-io/github-action@v6
-        with:
-          browser: edge
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        continue-on-error: true
-      - name: logging1
-        run: |
-          ls cypress/screenshots
-          ls cypress/videos
       - name: store screenshots
         uses: actions/upload-artifact@v4
         # add the line below to store screenshots only on failures
@@ -69,10 +41,6 @@ jobs:
           path: cypress/screenshots
           # 'warn' or 'error' are also available, defaults to `warn`
           if-no-files-found: ignore
-      - name: logging2
-        run: |
-          ls cypress/screenshots
-          ls cypress/videos
       - name: store videos
         uses: actions/upload-artifact@v4
         with:

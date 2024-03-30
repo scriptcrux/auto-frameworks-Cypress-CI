@@ -47,10 +47,10 @@ jobs:
       #   path: cypress/videos
       #   # 'warn' or 'error' are also available, defaults to `warn`
       #   if-no-files-found: ignore
-      - name: Cypress run in firefox
+      - name: Cypress run in edge
         uses: cypress-io/github-action@v6
         with:
-          browser: firefox
+          browser: edge
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true

@@ -29,22 +29,22 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true
-      - name: store screenshots
-        uses: actions/upload-artifact@v4
-        # add the line below to store screenshots only on failures
-        # if: failure()
-        with:
-          name: cypress-screenshots
-          path: cypress/screenshots
-          # 'warn' or 'error' are also available, defaults to `warn`
-          if-no-files-found: ignore
-      - name: store videos
-        uses: actions/upload-artifact@v4
-        with:
-          name: cypress-videos
-          path: cypress/videos
-          # 'warn' or 'error' are also available, defaults to `warn`
-          if-no-files-found: ignore
+      # - name: store screenshots
+      #   uses: actions/upload-artifact@v4
+      #   # add the line below to store screenshots only on failures
+      #   # if: failure()
+      #   with:
+      #     name: cypress-screenshots
+      #     path: cypress/screenshots
+      #     # 'warn' or 'error' are also available, defaults to `warn`
+      #     if-no-files-found: ignore
+      # - name: store videos
+      # uses: actions/upload-artifact@v4
+      # with:
+      #   name: cypress-videos
+      #   path: cypress/videos
+      #   # 'warn' or 'error' are also available, defaults to `warn`
+      #   if-no-files-found: ignore
       - name: Cypress run in firefox
         uses: cypress-io/github-action@v6
         with:

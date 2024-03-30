@@ -20,7 +20,7 @@ jobs:
     # container:
     #     image: cypress/browsers:latest
     #     options: --user 1001
-    name: cross-browser testing
+    name: cross-browser testing-${{matrix.browsers}}
     # continue-on-error: true
     steps:
       - name: Checkout
@@ -41,10 +41,10 @@ jobs:
           path: cypress/screenshots
           # 'warn' or 'error' are also available, defaults to `warn`
           if-no-files-found: ignore
-      - name: store videos-${{matrix.browsers}}
+      - name: store videos
         uses: actions/upload-artifact@v4
         with:
-          name: cypress-videos
+          name: cypress-videos-${{matrix.browsers}}
           path: cypress/videos
           # 'warn' or 'error' are also available, defaults to `warn`
           if-no-files-found: ignore

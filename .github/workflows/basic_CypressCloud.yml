@@ -1,4 +1,4 @@
-name: end to end testing
+name: basic_CypressCloud
 on:
   push:
     branches:

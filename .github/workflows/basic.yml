@@ -1,4 +1,4 @@
-name: end to end testing
+name: basic
 on:
   push:
     branches:

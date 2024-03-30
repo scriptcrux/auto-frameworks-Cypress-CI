@@ -57,7 +57,7 @@ describe('template spec', () => {
     // cy.contains('My Account');
     // cy.contains('My Orders');
     myAccountPage.verifyAccountHeader('card-header');
-    myAccountPage.verifyOrderHeader('card-headers');
+    myAccountPage.verifyOrderHeader('card-header');
   });
 
   it('using single command to login', function () {
@@ -78,6 +78,6 @@ describe('template spec', () => {
     // cy.contains('My Account');
     // cy.contains('My Orders');
     myAccountPage.verifyAccountHeader('card-header');
-    myAccountPage.verifyOrderHeader('card-headers');
+    myAccountPage.verifyOrderHeader('card-header');
   });
 });

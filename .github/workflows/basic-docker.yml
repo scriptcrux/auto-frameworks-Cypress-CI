@@ -1,4 +1,4 @@
-name: end to end testing
+name: basic-docker
 on:
   push:
     branches:

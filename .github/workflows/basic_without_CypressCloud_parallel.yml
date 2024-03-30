@@ -29,6 +29,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true
+      - name: logging0
+        run: ls cypress
       # - name: store screenshots
       #   uses: actions/upload-artifact@v4
       #   # add the line below to store screenshots only on failures
@@ -52,6 +54,8 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true
+      - name: logging1
+        run: ls cypress
       - name: store screenshots
         uses: actions/upload-artifact@v4
         # add the line below to store screenshots only on failures
@@ -61,6 +65,8 @@ jobs:
           path: cypress/screenshots
           # 'warn' or 'error' are also available, defaults to `warn`
           if-no-files-found: ignore
+      - name: logging2
+        run: ls cypress
       - name: store videos
         uses: actions/upload-artifact@v4
         with:

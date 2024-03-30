@@ -8,7 +8,7 @@ import path from 'path';
 
 export default defineConfig({
   video: true,
-  videoCompression: true,
+  // videoCompression: true,
   e2e: {
     // baseUrl: 'https://example.cypress.io',
     baseUrl: 'https://ecommerce-playground.lambdatest.io/index.php',

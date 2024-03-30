@@ -1,0 +1,47 @@
+name: end to end testing
+on:
+  push:
+    branches:
+      - 'master'
+      - 'main'
+      - 'features/**'
+  pull_request:
+    branches:
+      - 'master'
+      - 'main'
+      - 'features/**'
+  workflow_dispatch:
+jobs:
+  cypress-run:
+    runs-on: ubuntu-22.04
+    strategy:
+      # when one test fails, DO NOT cancel the other
+      # containers, because this will kill Cypress processes
+      # leaving Cypress Cloud hanging ...
+      fail-fast: false
+      matrix:
+        # run 2 copies of the current job in parallel
+        containers: [1, 2]
+    # container:
+    #     image: cypress/browsers:latest
+    #     options: --user 1001
+    name: E2E on chrome
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+        # because of "record" and "parallel" parameters
+        # these containers will load balance all found tests among themselves
+        with:
+          record: true
+          parallel: true
+          # Cancel the run after 2 failed tests
+          auto-cancel-after-failures: 2
+        env:
+          CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
+          CYPRESS_PROJECT_ID: ${{secrets.CYPRESS_PROJECT_ID}}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      #   with:
+      #     browser: chrome
+      # headed: true

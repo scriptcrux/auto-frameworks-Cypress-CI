@@ -17,7 +17,7 @@ describe('template spec', () => {
     });
   });
 
-  xit('user is able to register', () => {
+  it('user is able to register', () => {
     //generating data
     const username = faker.person.firstName();
     const lastname = faker.person.lastName();

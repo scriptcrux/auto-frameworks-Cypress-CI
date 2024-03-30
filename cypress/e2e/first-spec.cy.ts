@@ -40,7 +40,7 @@ describe('template spec', () => {
     myAccountPage.verifyAccountHeader('card-header');
   });
 
-  xit('user is able to login', function () {
+  it('user is able to login', function () {
     // cy.login(this.newData);
     // cy.login();
 
@@ -57,7 +57,7 @@ describe('template spec', () => {
     // cy.contains('My Account');
     // cy.contains('My Orders');
     myAccountPage.verifyAccountHeader('card-header');
-    myAccountPage.verifyOrderHeader('card-header');
+    myAccountPage.verifyOrderHeader('card-headers');
   });
 
   it('using single command to login', function () {

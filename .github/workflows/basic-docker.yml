@@ -1,0 +1,21 @@
+name: end to end testing
+on:
+  push:
+    branches:
+      - 'master'
+      - 'main'
+jobs:
+  cypress-run:
+    runs-on: ubuntu-22.04
+    container:
+      image: cypress/browsers:latest
+      options: --user 1001
+    name: E2E on chrome
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Cypress run
+        uses: cypress-io/github-action@v6
+      #   with:
+      #     browser: chrome
+      # headed: true

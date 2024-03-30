@@ -2,8 +2,9 @@ name: end to end testing
 on:
   push:
     branches:
-      - 'master'
-      - 'main'
+      # - 'master'
+      # - 'main'
+      - 'user'
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04

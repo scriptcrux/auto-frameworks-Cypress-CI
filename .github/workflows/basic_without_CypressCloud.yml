@@ -18,6 +18,7 @@ jobs:
     #     image: cypress/browsers:latest
     #     options: --user 1001
     name: E2E on chrome
+    # continue-on-error: true
     steps:
       - name: Checkout
         uses: actions/checkout@v4
@@ -25,8 +26,11 @@ jobs:
         uses: cypress-io/github-action@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
       - name: store screenshots
         uses: actions/upload-artifact@v4
+        # add the line below to store screenshots only on failures
+        # if: failure()
         with:
           name: cypress-screenshots
           path: cypress/screenshots

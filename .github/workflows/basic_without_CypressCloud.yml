@@ -21,10 +21,14 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+      - name: logging0
+        uses: ls
       - name: Cypress run
         uses: cypress-io/github-action@v6
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: logging1
+        uses: ls
       - name: store screenshots
         uses: actions/upload-artifact@v4
         with:
@@ -39,3 +43,5 @@ jobs:
           path: cypress/videos
           # 'warn' or 'error' are also available, defaults to `warn`
           if-no-files-found: ignore
+      - name: logging2
+        uses: ls

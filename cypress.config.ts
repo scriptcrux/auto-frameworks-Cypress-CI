@@ -11,7 +11,7 @@ export default defineConfig({
   // videoCompression: true,
   // trashAssetsBeforeRuns: false,
   /*  
-// for generating simple mocha report
+// 1st way: for generating simple mocha report
 
  reporter: 'mochawesome',
   reporterOptions: {
@@ -22,6 +22,9 @@ export default defineConfig({
     reportFileName: 'e2e testing',
   },
    */
+
+  //  2nd way- using cypress-mochawesome-reporter
+
   reporter: 'cypress-mochawesome-reporter',
   reporterOptions: {
     charts: true,
@@ -31,6 +34,19 @@ export default defineConfig({
     saveAllAttempts: false,
     videoOnFailOnly: true,
   },
+
+  /*  3rd way to generate report: currently not working
+ reporter: 'cypress-multi-reporters',
+  reporterOptions: {
+    reporterEnabled: 'mochawesome',
+    mochawesomeReporterOptions: {
+      reportDir: 'cypress/reports/mocha',
+      quite: true,
+      overwrite: false,
+      html: false,
+      json: true,
+    },
+  }, */
   e2e: {
     // baseUrl: 'https://example.cypress.io',
     baseUrl: 'https://ecommerce-playground.lambdatest.io/index.php',

@@ -1,4 +1,4 @@
-name: basic_without_CypressCloud_parallel
+name: basic_without_cc_parallel_reporting
 on:
   push:
     branches:

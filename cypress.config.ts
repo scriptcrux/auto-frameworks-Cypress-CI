@@ -9,12 +9,34 @@ import path from 'path';
 export default defineConfig({
   video: true,
   // videoCompression: true,
-  trashAssetsBeforeRuns: false,
+  // trashAssetsBeforeRuns: false,
+  /*  
+// for generating simple mocha report
+
+ reporter: 'mochawesome',
+  reporterOptions: {
+    // overwrite: false,
+    // html: false,
+    // json: true,
+    charts: true,
+    reportFileName: 'e2e testing',
+  },
+   */
+  reporter: 'cypress-mochawesome-reporter',
+  reporterOptions: {
+    charts: true,
+    reportPageTitle: 'E2E Testing',
+    embeddedScreenshots: true,
+    inlineAssets: true,
+    saveAllAttempts: false,
+    videoOnFailOnly: true,
+  },
   e2e: {
     // baseUrl: 'https://example.cypress.io',
     baseUrl: 'https://ecommerce-playground.lambdatest.io/index.php',
     pageLoadTimeout: 120000,
     async setupNodeEvents(on, config) {
+      require('cypress-mochawesome-reporter/plugin')(on);
       // createe task to read from csv
       // const fileName = 'D:/FrondEnd/Testing/framework/cypress-e2e/cypress/fixtures/login.csv';
       // const fileName = path.join(__dirname, 'cypress/fixtures/login.csv');

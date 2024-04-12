@@ -37,7 +37,7 @@ pipeline {
         sh 'npm ci'
         // sh "npm run test:ci:record"
         // sh "npm run cypress:run"
-        sh "npx cypress run --browser ${BROWSER} --spec ${SPEC}"
+        sh "npx cypress run --browser ${BROWSER} --spec "${SPEC}""
       }
     }
     stage('Deploy'){

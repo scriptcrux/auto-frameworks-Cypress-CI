@@ -7,6 +7,10 @@ pipeline {
   // }
   agent any
 
+    options {
+        ansiColor('xterm')
+    }
+
   parameters{
     string(name: 'SPEC', defaultValue: "cypress/e2e/**/**", description:"Enter the specs")
     choice(name: 'BROWSER', choices:['chrome','edge','firefox'], description: "Choice the browser where you want to execute tests?")

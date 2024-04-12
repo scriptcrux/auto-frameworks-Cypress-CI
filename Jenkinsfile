@@ -17,6 +17,10 @@ pipeline {
   }
 
   stages {
+    stage('Pre-Build'){
+      echo "pre checks will run"
+    }
+
     stage('build and test') {
     //   environment {
     //     // we will be recording test results on Cypress Cloud
@@ -29,8 +33,15 @@ pipeline {
       steps {
         sh 'npm ci'
         // sh "npm run test:ci:record"
-        sh "npm run cypress:run"
+        // sh "npm run cypress:run"
+        sh "npx cypress run --browser ${BROWSER} --spec ${SPEC}"
       }
     }
+    stage('Deploy'){
+       echo "Building the application"
+    }
+  }
+  post{
+    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'cypress/reports/', reportFiles: 'index.html', reportName: 'Cypress e2e results', reportTitles: '', useWrapperFileDirectly: true])
   }
 }

@@ -12,7 +12,7 @@ pipeline {
     }
 
   parameters{
-    string(name: 'SPEC', defaultValue: "cypress/e2e/**/*.spec.ts", description:"Enter the specs")
+    string(name: 'SPEC', defaultValue: "cypress/e2e/**/*spec.cy.ts", description:"Enter the specs")
     choice(name: 'BROWSER', choices:['electron','chrome','edge','firefox'], description: "Choice the browser where you want to execute tests?")
   }
 

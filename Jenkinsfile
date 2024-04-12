@@ -18,7 +18,10 @@ pipeline {
 
   stages {
     stage('Pre-Build'){
+      steps{
+
       echo "pre checks will run"
+      }
     }
 
     stage('build and test') {
@@ -38,10 +41,16 @@ pipeline {
       }
     }
     stage('Deploy'){
+      steps{
+
        echo "Building the application"
+      }
     }
   }
-  post{
-    publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'cypress/reports/', reportFiles: 'index.html', reportName: 'Cypress e2e results', reportTitles: '', useWrapperFileDirectly: true])
-  }
+
+  post { 
+        always { 
+            publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: true, reportDir: 'cypress/reports/', reportFiles: 'index.html', reportName: 'Cypress e2e results', reportTitles: '', useWrapperFileDirectly: true])
+        }
+    }
 }

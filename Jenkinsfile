@@ -1,10 +1,11 @@
 pipeline {
-  agent {
+  // agent {
     // this image provides everything needed to run Cypress
-    docker {
-      image 'cypress/base:20.9.0'
-    }
-  }
+    // docker {
+    //   image 'cypress/base:20.9.0'
+    // }
+  // }
+  agent any
 
   parameters{
     string(name: 'SPEC', defaultValue: "cypress/e2e/**/**", description:"Enter the specs")

@@ -12,7 +12,7 @@ pipeline {
     }
 
   parameters{
-    string(name: 'SPEC', defaultValue: "cypress/e2e/**/*", description:"Enter the specs")
+    string(name: 'SPEC', defaultValue: "cypress/e2e/**/*.spec.js", description:"Enter the specs")
     choice(name: 'BROWSER', choices:['electron','chrome','edge','firefox'], description: "Choice the browser where you want to execute tests?")
   }
 
@@ -37,7 +37,7 @@ pipeline {
         sh 'npm ci'
         // sh "npm run test:ci:record"
         // sh "npm run cypress:run"
-        sh "npx cypress run --browser ${BROWSER} --spec "${SPEC}""
+        sh "npx cypress run --browser ${BROWSER} --spec ${SPEC}"
       }
     }
     stage('Deploy'){

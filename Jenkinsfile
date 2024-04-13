@@ -49,7 +49,7 @@ pipeline {
   }
 
   post { 
-        // always { 
+        // always {    
         //     publishHTML([
         //       allowMissing: false, 
         //       alwaysLinkToLastBuild: false, 
@@ -61,7 +61,7 @@ pipeline {
         //       useWrapperFileDirectly: true])
         // }
         always{
-            emailext{
+            emailext(
               subject: 'cypress E2E-pipeline-status:${currentBuild.result}', 
               body: '''<html>
                                 <body>
@@ -74,7 +74,7 @@ pipeline {
               replyTo: 'testautomation@example.com',
               from: 'testautomation@example.com'
               mimeType: 'text/html',
-            } 
+            ) 
         }
     }
 }

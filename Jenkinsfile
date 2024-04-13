@@ -49,18 +49,18 @@ pipeline {
   }
 
   post { 
-        // always {    
-        //     publishHTML([
-        //       allowMissing: false, 
-        //       alwaysLinkToLastBuild: false, 
-        //       keepAll: true, 
-        //       reportDir: 'cypress/reports/html', 
-        //       reportFiles: 'index.html',
-        //       reportName: 'Cypress e2e results',
-        //       reportTitles: '', 
-        //       useWrapperFileDirectly: true])
+        always {    
+            publishHTML([
+              allowMissing: false, 
+              alwaysLinkToLastBuild: false, 
+              keepAll: true, 
+              reportDir: 'cypress/reports/html', 
+              reportFiles: 'index.html',
+              reportName: 'Cypress e2e results',
+              reportTitles: '', 
+              useWrapperFileDirectly: true])
         // }
-        always{
+        // always{
             emailext(
               subject: 'cypress E2E-pipeline-status:${currentBuild.result}', 
               body: '''<html>

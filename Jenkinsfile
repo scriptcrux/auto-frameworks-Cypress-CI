@@ -61,7 +61,7 @@ pipeline {
               useWrapperFileDirectly: true])
         }
         always{
-            emailtext{
+            emailext{
               subject: 'Cypress E2E-pipeline-status:${currentBuild.result}', 
               body: '''<html>
                                 <body>

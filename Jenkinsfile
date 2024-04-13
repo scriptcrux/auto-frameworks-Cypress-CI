@@ -70,9 +70,9 @@ pipeline {
                                       <p>Check the <a href="${env.BUILD_URL}">console output</a></p>
                                 </body>
                               </html>''', 
-              to: 'amanpatwalfor@gmail.com'
+              to: 'amanpatwalfor@gmail.com',
               replyTo: 'testautomation@example.com',
-              from: 'testautomation@example.com'
+              from: 'testautomation@example.com',
               mimeType: 'text/html',
             ) 
         }

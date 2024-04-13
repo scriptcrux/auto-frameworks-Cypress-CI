@@ -2,13 +2,13 @@ name: basic_without_cc_parallel_reporting
 on:
   push:
     branches:
-      - 'master'
-      - 'main'
+      # - 'master'
+      # - 'main'
       - 'features/**'
   pull_request:
     branches:
-      - 'master'
-      - 'main'
+      # - 'master'
+      # - 'main'
       - 'features/**'
   workflow_dispatch:
 jobs:

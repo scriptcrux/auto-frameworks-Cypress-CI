@@ -79,7 +79,8 @@ pipeline {
         // recipientProviders: [[$class: 'CulpritsRecipientProvider']]
     )
 
-    archiveArtifacts artifacts: 'cypress/reports/*', excludes: 'cypress/reports/**/*.zip', followSymlinks: false
+    // archiveArtifacts artifacts: 'cypress/reports/*', excludes: 'cypress/reports/**/*.zip', followSymlinks: false
+    archiveArtifacts artifacts: 'cypress/reports/html'
         }
     }
 }

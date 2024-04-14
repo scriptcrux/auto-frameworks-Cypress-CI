@@ -80,7 +80,7 @@ pipeline {
     )
 
     // archiveArtifacts artifacts: 'cypress/reports/*', excludes: 'cypress/reports/**/*.zip', followSymlinks: false
-    archiveArtifacts artifacts: 'cypress/reports/html'
+    archiveArtifacts artifacts: 'cypress/reports/**'
         }
     }
 }

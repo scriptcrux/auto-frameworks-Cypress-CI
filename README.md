@@ -14,6 +14,7 @@
 <br/>
 
 [Architecture](#-framework-architecture) •
+[Test Coverage](#-test-coverage--framework-demonstrations) •
 [Features](#-key-engineering-highlights) •
 [Directory Structure](#-repository-structure) •
 [Quick Start](#-quick-start) •
@@ -27,7 +28,7 @@
 
 ## 🎯 Overview
 
-This repository represents an enterprise-grade automated testing solution architected for high resilience, parallel execution, and continuous delivery. Built to validate complex e-commerce customer journeys, this framework demonstrates modern SDET engineering practices: strict TypeScript typings, component-based Page Object Model (POM), data-driven testing via JSON/CSV with Node background tasks, cross-browser GitHub Actions matrix pipelines, Docker containerized execution, and automated Jenkins pipelines with rich HTML reporting and failure alerts.
+This repository represents an enterprise-grade automated testing solution architected for high resilience, parallel execution, and continuous delivery against modern web applications (System Under Test: [LambdaTest eCommerce Playground](https://ecommerce-playground.lambdatest.io/index.php)). Built to validate end-to-end customer journeys and backend contracts, this framework demonstrates modern SDET engineering practices: strict TypeScript typings, component-based Page Object Model (POM), data-driven testing via JSON/CSV with Node background tasks, network interception and fault injection (`cy.intercept`), cross-device viewport validation, cross-browser GitHub Actions matrix pipelines, Docker containerized execution, and automated Jenkins pipelines with rich HTML reporting and failure alerts.
 
 ---
 
@@ -38,13 +39,18 @@ flowchart TD
     subgraph Test_Layer [Test Specifications & Data]
         SpecAuth["authentication.cy.ts"]
         SpecReg["registration.cy.ts"]
+        SpecSearch["product-search.cy.ts"]
+        SpecCart["shopping-cart.cy.ts"]
+        SpecDDT["data-driven-testing.cy.ts"]
+        SpecAPI["api-mocking.cy.ts"]
+        SpecViewport["responsive-viewports.cy.ts"]
         Fixtures["Data Fixtures<br/>(login.json / login.csv)"]
         Faker["Faker API<br/>(Dynamic Test Data)"]
     end
 
     subgraph Core_Abstractions [Core Automation Engine]
         BasePage["Base Page Object<br/>(Page.ts)"]
-        POM["Specialized Pages<br/>(LoginPage, RegisterPage, etc.)"]
+        POM["Domain Page Objects<br/>(Accounts, Catalog, Checkout)"]
         Commands["Custom Cypress Commands<br/>(commands.ts / index.d.ts)"]
         NodeTasks["Node Event Plugins<br/>(CSV / Storage Tasks)"]
     end
@@ -74,10 +80,27 @@ flowchart TD
 
 ---
 
+## 🧪 Test Coverage & Framework Demonstrations
+
+This framework includes test suites designed to exercise and demonstrate all core SDET capabilities against the public SUT:
+
+| Test Specification | Domain & Focus | Key Framework Features Demonstrated |
+| :--- | :--- | :--- |
+| [`authentication.cy.ts`](cypress/e2e/authentication.cy.ts) | User Authentication | Page Object Model (`LoginPage`), custom command `cy.login()`, positive/negative validation, and alert checks. |
+| [`registration.cy.ts`](cypress/e2e/registration.cy.ts) | Account Registration | `@faker-js/faker` dynamic profile generation, GDPR checkbox interaction, and runtime credential persistence to JSON/CSV fixtures. |
+| [`product-search.cy.ts`](cypress/e2e/product-search.cy.ts) | Catalog & Discovery | `ProductSearchPage`, custom command `cy.searchProduct()`, sorting dropdowns, and zero-state boundary assertions. |
+| [`shopping-cart.cy.ts`](cypress/e2e/shopping-cart.cy.ts) | Cart & Order Management | Cross-page journeys (Search &rarr; Product &rarr; Cart), quantity updates, item deletions, and state verification (`CartPage`). |
+| [`data-driven-testing.cy.ts`](cypress/e2e/data-driven-testing.cy.ts) | Data-Driven Testing (DDT) | Dynamic ingestion of JSON fixtures and CSV files via custom Node event tasks (`neat-csv`), with parameterized test execution. |
+| [`api-mocking.cy.ts`](cypress/e2e/api-mocking.cy.ts) | Network & Contract Testing | `cy.intercept` HTTP payload validation, response stubbing/mocking, and HTTP 500 fault injection to test frontend resiliency. |
+| [`responsive-viewports.cy.ts`](cypress/e2e/responsive-viewports.cy.ts) | Cross-Device Responsiveness | Multi-breakpoint testing across Mobile (375x667), Tablet (768x1024), and Desktop (1440x900) with `cy.setDeviceViewport()`. |
+| [`first-spec.cy.ts`](cypress/e2e/first-spec.cy.ts) | End-to-End Regression | Comprehensive customer lifecycle regression test combining registration, credential persistence, and multi-step login. |
+
+---
+
 ## ✨ Key Engineering Highlights
 
-- **📐 Clean Page Object Model (POM):** Strict separation of page interactions, element locators, and test assertions with base page inheritance (`Page.ts`).
-- **🛡️ End-to-End Type Safety:** Strict TypeScript compilation with full auto-completion and typing extensions for Cypress custom commands (`cypress/support/index.d.ts`).
+- **📐 Clean Page Object Model (POM):** Strict separation of page interactions, element locators, and test assertions with base page inheritance ([`Page.ts`](cypress/e2e/pages/Page.ts)).
+- **🛡️ End-to-End Type Safety:** Strict TypeScript compilation with full auto-completion and typing extensions for Cypress custom commands ([`cypress/support/index.d.ts`](cypress/support/index.d.ts)).
 - **🔄 Data-Driven Testing (DDT):** Seamless data ingestion from JSON fixtures and CSV files, coupled with custom Node tasks for dynamic credential persistence during test runs.
 - **⚡ Dynamic Data Generation:** Integration with `@faker-js/faker` to create realistic, collision-free customer test profiles on the fly.
 - **🌐 Cross-Browser Matrix CI:** Multi-browser matrix execution across Chrome, Edge, and Electron via GitHub Actions workflows.
@@ -107,10 +130,20 @@ flowchart TD
 │   │   │   │   ├── RegisterPage.ts     # User registration page object
 │   │   │   │   ├── NavigationPage.ts   # Top navbar and navigation menus
 │   │   │   │   ├── MyAccountPage.ts    # User dashboard verification
+│   │   │   │   ├── ForgotPasswordPage.ts # Password recovery page object
 │   │   │   │   └── SuccessPage.ts      # Confirmation page object
+│   │   │   ├── Catalog/                # Catalog domain page objects
+│   │   │   │   └── ProductSearchPage.ts # Product discovery & filter page object
+│   │   │   ├── Checkout/               # Checkout & Cart page objects
+│   │   │   │   └── CartPage.ts         # Cart management page object
 │   │   │   └── Page.ts                 # Base Page Object abstraction
 │   │   ├── authentication.cy.ts        # Authentication test suite
 │   │   ├── registration.cy.ts          # Registration & data persistence suite
+│   │   ├── product-search.cy.ts        # Catalog search & filtering suite
+│   │   ├── shopping-cart.cy.ts         # Cart operations & validation suite
+│   │   ├── data-driven-testing.cy.ts   # Parameterized JSON & CSV test suite
+│   │   ├── api-mocking.cy.ts           # cy.intercept network contract & fault injection
+│   │   ├── responsive-viewports.cy.ts  # Cross-device responsive layout suite
 │   │   └── first-spec.cy.ts            # End-to-end customer journey regression
 │   ├── fixtures/                       # Static & dynamic test datasets (JSON, CSV)
 │   ├── support/

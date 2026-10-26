@@ -1,7 +1,5 @@
 import tsParser from '@typescript-eslint/parser';
 import tsPlugin from '@typescript-eslint/eslint-plugin';
-import cypressPlugin from 'eslint-plugin-cypress';
-import chaiFriendlyPlugin from 'eslint-plugin-chai-friendly';
 
 export default [
   {
@@ -17,15 +15,12 @@ export default [
       }
     },
     plugins: {
-      '@typescript-eslint': tsPlugin,
-      'cypress': cypressPlugin,
-      'chai-friendly': chaiFriendlyPlugin
+      '@typescript-eslint': tsPlugin
     },
     rules: {
       '@typescript-eslint/no-explicit-any': 'off',
       '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
-      '@typescript-eslint/no-namespace': 'off',
-      'cypress/no-unnecessary-waiting': 'warn'
+      '@typescript-eslint/no-namespace': 'off'
     }
   }
 ];

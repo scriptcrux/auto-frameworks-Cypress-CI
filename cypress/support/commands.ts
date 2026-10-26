@@ -44,4 +44,38 @@ export default function addCustomCommands(): void {
       cy.task('writeFileCSV', { fileName, data: updatedContent });
     });
   });
+
+  /**
+   * Performs quick search from global header input.
+   */
+  Cypress.Commands.add('searchProduct', (keyword: string) => {
+    cy.get('input[name="search"], [placeholder*="Search"]').first().clear().type(`${keyword}{enter}`);
+  });
+
+  /**
+   * Sets viewport to common responsive breakpoints.
+   */
+  Cypress.Commands.add('setDeviceViewport', (preset: Cypress.DevicePreset) => {
+    switch (preset) {
+      case 'mobile':
+        cy.viewport(375, 667); // iPhone SE / Mobile standard
+        break;
+      case 'tablet':
+        cy.viewport(768, 1024); // iPad Portrait
+        break;
+      case 'desktop':
+      default:
+        cy.viewport(1440, 900); // Standard desktop
+        break;
+    }
+  });
+
+  /**
+   * Asserts any prominent alert or toast notification.
+   */
+  Cypress.Commands.add('assertNotification', (expectedText: string) => {
+    cy.get('.alert, .toast, .notification')
+      .should('be.visible')
+      .and('contain.text', expectedText);
+  });
 }

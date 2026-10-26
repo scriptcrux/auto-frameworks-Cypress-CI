@@ -1,16 +1,34 @@
-class SuccessPage {
-  get pageHeader() {
+import Page from '../Page';
+
+/**
+ * Page Object representing Registration Success Confirmation.
+ */
+class SuccessPage extends Page {
+  get successHeader(): Cypress.Chainable<JQuery<HTMLElement>> {
     return cy.contains('Your Account Has Been Created!');
   }
-  get ContinueBtn() {
-    return cy.contains('Continue');
+
+  get continueButton(): Cypress.Chainable<JQuery<HTMLElement>> {
+    return cy.contains('a, button', 'Continue');
   }
 
-  verifyRegistrationPageSuccessHeader(cls: string) {
-    this.pageHeader.should('have.class', cls);
+  verifyRegistrationSuccess(): this {
+    this.successHeader.should('be.visible');
+    return this;
   }
-  selectContinueBtn() {
-    this.ContinueBtn.click();
+
+  verifyRegistrationPageSuccessHeader(className?: string): this {
+    if (className) {
+      this.successHeader.should('have.class', className);
+    } else {
+      this.successHeader.should('be.visible');
+    }
+    return this;
+  }
+
+  selectContinueBtn(): this {
+    this.continueButton.click();
+    return this;
   }
 }
 

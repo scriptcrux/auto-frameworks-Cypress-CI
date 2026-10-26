@@ -1,45 +1,45 @@
-name: basic_without_CypressCloud
+name: E2E Execution with Media Artifacts
+
 on:
   push:
     branches:
-      # - 'master'
-      # - 'main'
-      - 'features/**'
+      - master
+      - main
   pull_request:
     branches:
-      # - 'master'
-      # - 'main'
-      - 'features/**'
+      - master
+      - main
   workflow_dispatch:
+
 jobs:
   cypress-run:
     runs-on: ubuntu-22.04
-    # container:
-    #     image: cypress/browsers:latest
-    #     options: --user 1001
-    name: E2E on chrome
-    # continue-on-error: true
+    name: E2E on Chrome with Artifacts
     steps:
-      - name: Checkout
+      - name: Checkout Codebase
         uses: actions/checkout@v4
-      - name: Cypress run
+
+      - name: Run Cypress E2E
         uses: cypress-io/github-action@v6
+        with:
+          browser: chrome
+          headless: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true
-      - name: store screenshots
+
+      - name: Store Failure Screenshots
         uses: actions/upload-artifact@v4
-        # add the line below to store screenshots only on failures
-        # if: failure()
+        if: always()
         with:
           name: cypress-screenshots
           path: cypress/screenshots
-          # 'warn' or 'error' are also available, defaults to `warn`
           if-no-files-found: ignore
-      - name: store videos
+
+      - name: Store Test Videos
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: cypress-videos
           path: cypress/videos
-          # 'warn' or 'error' are also available, defaults to `warn`
           if-no-files-found: ignore

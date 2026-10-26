@@ -1,8 +1,21 @@
-node_modules
-readme.md
+# Dependencies
+node_modules/
+package-lock.json.backup
+
+# Environment & Secrets
 .env
-mochawesome-report/
+.env.*
+!.env.example
+
+# Test Execution Artifacts
 cypress/screenshots/
 cypress/videos/
 cypress/reports/
-image*.png
+mochawesome-report/
+
+# OS and Editor metadata
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.log

@@ -1,14 +1,21 @@
 {
   "compilerOptions": {
-    "target": "ES5",
-    "lib": ["ES5", "DOM"],
+    "target": "ES2022",
+    "module": "commonjs",
+    "moduleResolution": "node",
+    "lib": ["ES2022", "DOM"],
     "types": ["cypress", "node"],
+    "baseUrl": ".",
+    "paths": {
+      "@pages/*": ["cypress/e2e/pages/*"],
+      "@support/*": ["cypress/support/*"],
+      "@fixtures/*": ["cypress/fixtures/*"]
+    },
     "esModuleInterop": true,
-    "allowJs": true
-    // "moduleResolution": "Node"
-    // "module": "commonjs",
-    // "moduleResolution": "node",
-    // "preserveValueImports": false
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": false
   },
   "include": ["**/*.ts"]
 }

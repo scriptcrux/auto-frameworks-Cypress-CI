@@ -1,83 +1,66 @@
 import { fakerEN_IN as faker } from '@faker-js/faker';
-import * as fs from 'fs';
-import path from 'path';
 import navigationPage from './pages/Accounts/NavigationPage';
 import registerPage from './pages/Accounts/RegisterPage';
 import successPage from './pages/Accounts/SuccessPage';
 import myAccountPage from './pages/Accounts/MyAccountPage';
 import loginPage from './pages/Accounts/LoginPage';
 
-describe('template spec', () => {
-  const fileNamecsv = 'cypress/fixtures/login.csv';
-  const fileNamejson = 'cypress/fixtures/login.json';
-  beforeEach('Navigation to portal', function () {
+describe('E-Commerce Authentication & User Management Suite', () => {
+  const fileNameCsv = 'cypress/fixtures/login.csv';
+  const fileNameJson = 'cypress/fixtures/login.json';
+
+  beforeEach('Navigate to application portal', function () {
     cy.visit('/');
-    cy.fixture('login.json').then(function (data) {
-      this.newData = data[1];
+    cy.fixture<Cypress.UserCredentials[]>('login.json').then(function (data) {
+      this.userData = data[1] || data[0];
     });
   });
 
-  xit('user is able to register', () => {
-    //generating data
-    const username = faker.person.firstName();
-    const lastname = faker.person.lastName();
+  it('TC01: Registers a new user account with dynamic data and persists credentials', () => {
+    const firstName = faker.person.firstName();
+    const lastName = faker.person.lastName();
     const email = faker.internet.email();
     const cellNumber = faker.phone.number();
-    const password = faker.internet.password();
+    const password = faker.internet.password({ length: 10 });
 
     navigationPage.openMyAccountMenu();
     navigationPage.openRegisterPage();
-    registerPage.completeRegistration(username, lastname, email, cellNumber, password, password, 'Yes');
 
-    cy.readJSONFile(fileNamejson, { email, password });
+    registerPage.completeRegistration(
+      firstName,
+      lastName,
+      email,
+      cellNumber,
+      password,
+      password,
+      'Yes'
+    );
 
-    cy.readCSVFile(fileNamecsv, { email, password });
+    // Persist registered credentials for data-driven regression runs
+    cy.readJSONFile(fileNameJson, { email, password });
+    cy.readCSVFile(fileNameCsv, { email, password });
 
-    // //moving to main page
+    // Verify registration success and navigate to dashboard
     successPage.selectContinueBtn();
-
-    //verifying logged in to welcome page
-    myAccountPage.verifyAccountHeader('card-header');
+    myAccountPage.verifyAccountHeader();
   });
 
-  it('user is able to login', function () {
-    // cy.login(this.newData);
-    // cy.login();
-
-    // opening account menu
+  it('TC02: Authenticates existing user via Page Object interactions', function () {
     navigationPage.openMyAccountMenu();
-
-    //opening registration form
     navigationPage.openLoginPage();
 
-    loginPage.login(this.newData.email, this.newData.password);
-
+    loginPage.login(this.userData.email, this.userData.password);
     loginPage.verifyPageURL('?route=account/account');
 
-    // cy.contains('My Account');
-    // cy.contains('My Orders');
-    myAccountPage.verifyAccountHeader('card-header');
-    myAccountPage.verifyOrderHeader('card-headers');
+    myAccountPage.verifyAccountHeader();
+    myAccountPage.verifyOrderHeader();
   });
 
-  it('using single command to login', function () {
-    // opening account menu
-    navigationPage.openMyAccountMenu();
-
-    //opening registration form
-    navigationPage.openLoginPage();
-
-    //without user
-    // cy.login();
-
-    //with user
-    cy.login(this.newData);
-
+  it('TC03: Authenticates using reusable custom command cy.login()', function () {
+    cy.login(this.userData);
     loginPage.verifyPageURL('?route=account/account');
 
-    // cy.contains('My Account');
-    // cy.contains('My Orders');
-    myAccountPage.verifyAccountHeader('card-header');
-    myAccountPage.verifyOrderHeader('card-header');
+    myAccountPage.verifyAccountHeader();
+    myAccountPage.verifyOrderHeader();
   });
 });

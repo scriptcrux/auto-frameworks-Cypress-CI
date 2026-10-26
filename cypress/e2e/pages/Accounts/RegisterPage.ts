@@ -1,68 +1,101 @@
-type subscriptionButton = 'Yes' | 'No';
+import Page from '../Page';
 
-class RegisterPage {
-  get openMyAccountMenu() {
-    return cy.get('.dropdown-hoverable').find('.info').find('span').filter(':contains("My account")');
+export type SubscriptionOption = 'Yes' | 'No';
+
+export interface RegistrationDetails {
+  firstName: string;
+  lastName: string;
+  email: string;
+  contactNumber: string;
+  pass: string;
+  confirmPass: string;
+  newsletter?: SubscriptionOption;
+}
+
+/**
+ * Page Object representing User Account Registration.
+ */
+class RegisterPage extends Page {
+  get pageHeader(): Cypress.Chainable<JQuery<HTMLElement>> {
+    return cy.get('.page-title, h1');
   }
 
-  get pageHeader() {
-    return cy.get('.page-title');
+  get firstNameInput(): Cypress.Chainable<JQuery<HTMLElement>> {
+    return cy.get('#input-firstname, [placeholder*="First Name"]');
   }
 
-  get firstName() {
-    return cy.get('.form-control').filter('[placeholder="First Name"]');
+  get lastNameInput(): Cypress.Chainable<JQuery<HTMLElement>> {
+    return cy.get('#input-lastname, [placeholder*="Last Name"]');
   }
 
-  get LastName() {
-    return cy.get('#input-lastname');
+  get emailInput(): Cypress.Chainable<JQuery<HTMLElement>> {
+    return cy.get('#input-email, [placeholder*="E-Mail"]');
   }
 
-  get emailField() {
-    return cy.get('[placeholder="E-Mail"]');
+  get telephoneInput(): Cypress.Chainable<JQuery<HTMLElement>> {
+    return cy.get('#input-telephone, [type="tel"]');
   }
 
-  get contactNum() {
-    return cy.get('[type="tel"]');
-  }
-
-  get passwordField() {
+  get passwordInput(): Cypress.Chainable<JQuery<HTMLElement>> {
     return cy.get('#input-password');
   }
 
-  get passwordConfirm() {
+  get passwordConfirmInput(): Cypress.Chainable<JQuery<HTMLElement>> {
     return cy.get('#input-confirm');
   }
 
-  get subscriptionButton() {
-    return cy.get('.custom-control-label').filter(`:contains('Yes')`).prev();
+  get newsletterYesRadio(): Cypress.Chainable<JQuery<HTMLElement>> {
+    return cy.get('input[name="newsletter"][value="1"], label:contains("Yes") input');
   }
 
-  get privacyPolicyChkBox() {
-    return cy.get('.custom-control-label').filter(':contains("I have read")').parent().children('#input-agree');
+  get newsletterNoRadio(): Cypress.Chainable<JQuery<HTMLElement>> {
+    return cy.get('input[name="newsletter"][value="0"], label:contains("No") input');
   }
 
-  get submitRegistrationBtn() {
-    return cy.get('[value="Continue"]');
+  get privacyPolicyCheckbox(): Cypress.Chainable<JQuery<HTMLElement>> {
+    return cy.get('input[name="agree"], #input-agree');
   }
 
-  enterPersonalDetails(firstName: string, lastName: string, email: string, contactNumber: string) {
-    this.firstName.type(firstName);
-    this.LastName.type(lastName);
-    this.emailField.type(email);
-    this.contactNum.type(contactNumber);
-  }
-  enterPassword(pass: string, confirmPass: string) {
-    this.passwordField.type(pass);
-    this.passwordConfirm.type(confirmPass);
+  get submitButton(): Cypress.Chainable<JQuery<HTMLElement>> {
+    return cy.get('input[type="submit"][value="Continue"], button:contains("Continue")');
   }
 
-  enterNewsletter(option: subscriptionButton) {
-    const subscriptionOption = option === 'Yes' ? '1' : '0';
-    this.subscriptionButton.check(subscriptionOption, { force: true });
-    this.privacyPolicyChkBox.click({ force: true });
-    this.submitRegistrationBtn.click();
+  enterPersonalDetails(firstName: string, lastName: string, email: string, contactNumber: string): this {
+    this.firstNameInput.clear().type(firstName);
+    this.lastNameInput.clear().type(lastName);
+    this.emailInput.clear().type(email);
+    this.telephoneInput.clear().type(contactNumber);
+    return this;
   }
 
+  enterPassword(password: string, confirmPassword: string): this {
+    this.passwordInput.clear().type(password);
+    this.passwordConfirmInput.clear().type(confirmPassword);
+    return this;
+  }
+
+  selectNewsletter(option: SubscriptionOption = 'Yes'): this {
+    if (option === 'Yes') {
+      this.newsletterYesRadio.check({ force: true });
+    } else {
+      this.newsletterNoRadio.check({ force: true });
+    }
+    return this;
+  }
+
+  agreeToPrivacyPolicy(): this {
+    this.privacyPolicyCheckbox.check({ force: true });
+    return this;
+  }
+
+  submit(): this {
+    this.submitButton.click();
+    return this;
+  }
+
+  /**
+   * Completes entire registration flow with a single method.
+   */
   completeRegistration(
     firstName: string,
     lastName: string,
@@ -70,11 +103,14 @@ class RegisterPage {
     contactNumber: string,
     pass: string,
     confirmPass: string,
-    option: subscriptionButton
-  ) {
+    option: SubscriptionOption = 'Yes'
+  ): this {
     this.enterPersonalDetails(firstName, lastName, email, contactNumber);
     this.enterPassword(pass, confirmPass);
-    this.enterNewsletter(option);
+    this.selectNewsletter(option);
+    this.agreeToPrivacyPolicy();
+    this.submit();
+    return this;
   }
 }
 

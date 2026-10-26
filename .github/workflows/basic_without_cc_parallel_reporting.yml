@@ -1,60 +1,57 @@
-name: basic_without_cc_parallel_reporting
+name: Parallel Matrix with Mochawesome Reporting
+
 on:
   push:
     branches:
-      # - 'master'
-      # - 'main'
-      - 'features/**'
+      - master
+      - main
   pull_request:
     branches:
-      # - 'master'
-      # - 'main'
-      - 'features/**'
+      - master
+      - main
   workflow_dispatch:
+
 jobs:
-  cypress-run:
-    strategy:
-      matrix:
-        browsers: [chrome, edge]
+  cypress-matrix-reporting:
+    name: Cross-Browser Testing (${{ matrix.browser }})
     runs-on: ubuntu-22.04
-    # container:
-    #     image: cypress/browsers:latest
-    #     options: --user 1001
-    name: cross-browser testing-${{matrix.browsers}}
-    # continue-on-error: true
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chrome, edge]
     steps:
-      - name: Checkout
+      - name: Checkout Codebase
         uses: actions/checkout@v4
-      - name: Cypress run in chrome
+
+      - name: Cypress Run (${{ matrix.browser }})
         uses: cypress-io/github-action@v6
         with:
-          browser: ${{matrix.browsers}}
+          browser: ${{ matrix.browser }}
+          headless: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true
-      - name: store screenshots
-        uses: actions/upload-artifact@v4
-        # add the line below to store screenshots only on failures
-        # if: failure()
-        with:
-          name: cypress-screenshots-${{matrix.browsers}}
-          path: cypress/screenshots
-          # 'warn' or 'error' are also available, defaults to `warn`
-          if-no-files-found: ignore
-      - name: store videos
-        uses: actions/upload-artifact@v4
-        with:
-          name: cypress-videos-${{matrix.browsers}}
-          path: cypress/videos
-          # 'warn' or 'error' are also available, defaults to `warn`
-          if-no-files-found: ignore
-      - name: store report
-        uses: actions/upload-artifact@v4
-        with:
-          name: cypress-report-${{matrix.browsers}}
-          path: |
-            cypress/reports/html
-            !cypress/reports/**/*mp4
 
-          # 'warn' or 'error' are also available, defaults to `warn`
+      - name: Store Screenshots
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cypress-screenshots-${{ matrix.browser }}
+          path: cypress/screenshots
+          if-no-files-found: ignore
+
+      - name: Store Videos
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cypress-videos-${{ matrix.browser }}
+          path: cypress/videos
+          if-no-files-found: ignore
+
+      - name: Store Mochawesome HTML Report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cypress-report-${{ matrix.browser }}
+          path: cypress/reports/html
           if-no-files-found: ignore

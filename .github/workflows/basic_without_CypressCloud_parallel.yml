@@ -1,50 +1,49 @@
-name: basic_without_CypressCloud_parallel
+name: Cross-Browser Matrix Execution
+
 on:
   push:
     branches:
-      # - 'master'
-      # - 'main'
-      - 'features/**'
+      - master
+      - main
   pull_request:
     branches:
-      # - 'master'
-      # - 'main'
-      - 'features/**'
+      - master
+      - main
   workflow_dispatch:
+
 jobs:
   cypress-run:
     strategy:
+      fail-fast: false
       matrix:
-        browsers: [chrome, edge]
+        browser: [chrome, edge]
     runs-on: ubuntu-22.04
-    # container:
-    #     image: cypress/browsers:latest
-    #     options: --user 1001
-    name: cross-browser testing-${{matrix.browsers}}
-    # continue-on-error: true
+    name: Cross-Browser Test (${{ matrix.browser }})
     steps:
-      - name: Checkout
+      - name: Checkout Codebase
         uses: actions/checkout@v4
-      - name: Cypress run in chrome
+
+      - name: Run Cypress in ${{ matrix.browser }}
         uses: cypress-io/github-action@v6
         with:
-          browser: ${{matrix.browsers}}
+          browser: ${{ matrix.browser }}
+          headless: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true
-      - name: store screenshots
+
+      - name: Store Screenshots
         uses: actions/upload-artifact@v4
-        # add the line below to store screenshots only on failures
-        # if: failure()
+        if: always()
         with:
-          name: cypress-screenshots-${{matrix.browsers}}
+          name: cypress-screenshots-${{ matrix.browser }}
           path: cypress/screenshots
-          # 'warn' or 'error' are also available, defaults to `warn`
           if-no-files-found: ignore
-      - name: store videos
+
+      - name: Store Videos
         uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: cypress-videos-${{matrix.browsers}}
+          name: cypress-videos-${{ matrix.browser }}
           path: cypress/videos
-          # 'warn' or 'error' are also available, defaults to `warn`
           if-no-files-found: ignore

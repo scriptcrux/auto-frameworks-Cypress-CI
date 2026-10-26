@@ -1,0 +1,86 @@
+name: Enterprise E2E CI Pipeline
+
+on:
+  push:
+    branches:
+      - master
+      - main
+  pull_request:
+    branches:
+      - master
+      - main
+  workflow_dispatch:
+
+jobs:
+  quality-gate:
+    name: Lint & Type Validation
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Install Dependencies
+        run: npm ci
+
+      - name: Execute TypeScript Type Check
+        run: npm run typecheck
+
+      - name: Execute ESLint Code Analysis
+        run: npm run lint
+
+  e2e-matrix-test:
+    name: E2E Cross-Browser (${{ matrix.browser }})
+    needs: quality-gate
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        browser: [chrome, edge, electron]
+    steps:
+      - name: Checkout Codebase
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js Environment
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Run Cypress E2E Tests
+        uses: cypress-io/github-action@v6
+        with:
+          browser: ${{ matrix.browser }}
+          headless: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        continue-on-error: true
+
+      - name: Upload Test Execution Reports
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: mochawesome-report-${{ matrix.browser }}
+          path: cypress/reports/html
+          if-no-files-found: ignore
+
+      - name: Upload Failure Screenshots
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cypress-screenshots-${{ matrix.browser }}
+          path: cypress/screenshots
+          if-no-files-found: ignore
+
+      - name: Upload Test Run Videos
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cypress-videos-${{ matrix.browser }}
+          path: cypress/videos
+          if-no-files-found: ignore

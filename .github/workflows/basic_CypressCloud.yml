@@ -1,36 +1,30 @@
-name: basic_CypressCloud
+name: Cypress Cloud Integration
+
 on:
   push:
     branches:
-      # - 'master'
-      # - 'main'
-      - 'features/**'
+      - master
+      - main
   pull_request:
     branches:
-      # - 'master'
-      # - 'main'
-      - 'features/**'
+      - master
+      - main
   workflow_dispatch:
+
 jobs:
-  cypress-run:
+  cypress-cloud-run:
+    name: E2E Run on Cypress Cloud
     runs-on: ubuntu-22.04
-    # container:
-    #     image: cypress/browsers:latest
-    #     options: --user 1001
-    name: E2E on chrome
     steps:
-      - name: Checkout
+      - name: Checkout Codebase
         uses: actions/checkout@v4
-      - name: Cypress run
+
+      - name: Cypress Cloud Run
         uses: cypress-io/github-action@v6
         with:
           record: true
-          # Cancel the run after 2 failed tests
           auto-cancel-after-failures: 2
         env:
-          CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
-          CYPRESS_PROJECT_ID: ${{secrets.CYPRESS_PROJECT_ID}}
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     browser: chrome
-      # headed: true

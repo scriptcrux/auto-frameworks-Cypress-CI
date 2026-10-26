@@ -1,22 +1,31 @@
-name: basic-docker
+name: Docker Containerized Execution
+
 on:
   push:
     branches:
-      # - 'master'
-      # - 'main'
-      - 'user'
+      - master
+      - main
+  pull_request:
+    branches:
+      - master
+      - main
+  workflow_dispatch:
+
 jobs:
-  cypress-run:
+  cypress-docker-run:
+    name: E2E Execution inside Cypress Docker Container
     runs-on: ubuntu-22.04
     container:
       image: cypress/browsers:latest
       options: --user 1001
-    name: E2E on chrome
     steps:
-      - name: Checkout
+      - name: Checkout Codebase
         uses: actions/checkout@v4
-      - name: Cypress run
+
+      - name: Cypress Run
         uses: cypress-io/github-action@v6
-      #   with:
-      #     browser: chrome
-      # headed: true
+        with:
+          browser: chrome
+          headless: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

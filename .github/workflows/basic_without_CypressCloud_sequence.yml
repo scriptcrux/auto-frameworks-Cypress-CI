@@ -1,70 +1,70 @@
-name: basic_without_CypressCloud_sequence
+name: Sequential Cross-Browser Execution
+
 on:
   push:
     branches:
-      # - 'master'
-      # - 'main'
-      - 'features/**'
+      - master
+      - main
   pull_request:
     branches:
-      # - 'master'
-      # - 'main'
-      - 'features/**'
+      - master
+      - main
   workflow_dispatch:
+
 jobs:
-  cypress-run:
+  cypress-sequential-run:
     runs-on: ubuntu-22.04
-    # container:
-    #     image: cypress/browsers:latest
-    #     options: --user 1001
-    name: cross-browser testing
-    # continue-on-error: true
+    name: Sequential Cross-Browser Testing
     steps:
-      - name: Checkout
+      - name: Checkout Codebase
         uses: actions/checkout@v4
-      - name: Cypress run in chrome
+
+      - name: Cypress Run (Chrome)
         uses: cypress-io/github-action@v6
         with:
           browser: chrome
+          headless: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true
-      # - name: store screenshots
-      #   uses: actions/upload-artifact@v4
-      #   # add the line below to store screenshots only on failures
-      #   # if: failure()
-      #   with:
-      #     name: cypress-screenshots
-      #     path: cypress/screenshots
-      #     # 'warn' or 'error' are also available, defaults to `warn`
-      #     if-no-files-found: ignore
-      # - name: store videos
-      # uses: actions/upload-artifact@v4
-      # with:
-      #   name: cypress-videos
-      #   path: cypress/videos
-      #   # 'warn' or 'error' are also available, defaults to `warn`
-      #   if-no-files-found: ignore
-      - name: Cypress run in edge
+
+      - name: Store Chrome Failure Screenshots
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cypress-screenshots-chrome
+          path: cypress/screenshots
+          if-no-files-found: ignore
+
+      - name: Store Chrome Videos
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: cypress-videos-chrome
+          path: cypress/videos
+          if-no-files-found: ignore
+
+      - name: Cypress Run (Edge)
         uses: cypress-io/github-action@v6
         with:
           browser: edge
+          headless: true
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         continue-on-error: true
-      - name: store screenshots
+
+      - name: Store Edge Failure Screenshots
         uses: actions/upload-artifact@v4
-        # add the line below to store screenshots only on failures
-        # if: failure()
+        if: always()
         with:
-          name: cypress-screenshots
+          name: cypress-screenshots-edge
           path: cypress/screenshots
-          # 'warn' or 'error' are also available, defaults to `warn`
           if-no-files-found: ignore
-      - name: store videos
+
+      - name: Store Edge Videos
         uses: actions/upload-artifact@v4
+        if: always()
         with:
-          name: cypress-videos
+          name: cypress-videos-edge
           path: cypress/videos
-          # 'warn' or 'error' are also available, defaults to `warn`
           if-no-files-found: ignore

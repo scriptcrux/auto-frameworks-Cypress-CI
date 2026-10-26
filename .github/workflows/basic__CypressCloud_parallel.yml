@@ -1,48 +1,34 @@
-name: basic__CypressCloud_parallel
+name: Cypress Cloud Parallel Execution
+
 on:
   push:
     branches:
-      # - 'master'
-      # - 'main'
-      - 'features/**'
+      - master
+      - main
   pull_request:
     branches:
-      # - 'master'
-      # - 'main'
-      - 'features/**'
+      - master
+      - main
   workflow_dispatch:
+
 jobs:
-  cypress-run:
+  cypress-cloud-parallel-run:
+    name: Parallel Load-Balanced Run (Worker ${{ matrix.containers }})
     runs-on: ubuntu-22.04
     strategy:
-      # when one test fails, DO NOT cancel the other
-      # containers, because this will kill Cypress processes
-      # leaving Cypress Cloud hanging ...
       fail-fast: false
       matrix:
-        # run 2 copies of the current job in parallel
         containers: [1, 2]
-    # container:
-    #     image: cypress/browsers:latest
-    #     options: --user 1001
-    name: E2E on chrome
     steps:
-      - name: Checkout
+      - name: Checkout Codebase
         uses: actions/checkout@v4
-      - name: Cypress run
+
+      - name: Cypress Parallel Cloud Run
         uses: cypress-io/github-action@v6
-        # because of "record" and "parallel" parameters
-        # these containers will load balance all found tests among themselves
         with:
           record: true
           parallel: true
-          # Cancel the run after 2 failed tests
-          # auto-cancel-after-failures: 10
-        continue-on-error: true
         env:
-          CYPRESS_RECORD_KEY: ${{secrets.CYPRESS_RECORD_KEY}}
-          CYPRESS_PROJECT_ID: ${{secrets.CYPRESS_PROJECT_ID}}
+          CYPRESS_RECORD_KEY: ${{ secrets.CYPRESS_RECORD_KEY }}
+          CYPRESS_PROJECT_ID: ${{ secrets.CYPRESS_PROJECT_ID }}
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-      #   with:
-      #     browser: chrome
-      # headed: true
